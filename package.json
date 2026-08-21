@@ -1,0 +1,27 @@
+{
+  "name": "cloud-lab",
+  "version": "1.0.0",
+  "description": "Student Name: Student ID: Class:",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dangphuc1305/cloud-lab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/dangphuc1305/cloud-lab/issues"
+  },
+  "homepage": "https://github.com/dangphuc1305/cloud-lab#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.9.3"
+  }
+}
