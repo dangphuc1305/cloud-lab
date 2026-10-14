@@ -7,7 +7,23 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware cho phép nhận JSON và chấp nhận gọi API từ nguồn khác (CORS)
-app.use(cors());
+// Cấu hình CORS linh hoạt cho Production
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(null, true); // Hoặc truyền origin cụ thể
+    }
+  },
+  credentials: true
+}));
 app.use(express.json());
 
 // Kết nối MongoDB Atlas

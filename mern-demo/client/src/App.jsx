@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
+// Đọc URL Backend từ biến môi trường (mặc định trỏ về Render Backend)
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://mern-backend-235646.onrender.com';
+const API_URL = `${BASE_URL}/api/students`;
+
 function App() {
   const [students, setStudents] = useState([]);
   const [formData, setFormData] = useState({
@@ -8,12 +12,12 @@ function App() {
     name: '',
     email: ''
   });
-  const [editId, setEditId] = useState(null); // Quản lý ID sinh viên đang sửa
+  const [editId, setEditId] = useState(null);
 
   // Lấy danh sách sinh viên từ Backend API (GET)
   const fetchStudents = async () => {
     try {
-      const res = await fetch('/api/students');
+      const res = await fetch(API_URL);
       const data = await res.json();
       setStudents(data);
     } catch (err) {
@@ -38,29 +42,27 @@ function App() {
     e.preventDefault();
     try {
       if (editId) {
-        // Gọi API PUT để sửa sinh viên (Câu 61)
-        await fetch(`/api/students/${editId}`, {
+        await fetch(`${API_URL}/${editId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
         setEditId(null);
       } else {
-        // Gọi API POST để thêm sinh viên (Câu 60)
-        await fetch('/api/students', {
+        await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
       }
       setFormData({ studentId: '', name: '', email: '' });
-      fetchStudents(); // Cập nhật lại danh sách (Câu 63)
+      fetchStudents();
     } catch (err) {
       console.error('Lỗi thao tác:', err);
     }
   };
 
-  // Đổ dữ liệu lên form để sửa (Câu 61)
+  // Đổ dữ liệu lên form để sửa
   const handleEdit = (sv) => {
     setEditId(sv._id);
     setFormData({
@@ -70,12 +72,12 @@ function App() {
     });
   };
 
-  // Xử lý xóa sinh viên qua API DELETE (Câu 62)
+  // Xử lý xóa sinh viên qua API DELETE
   const handleDelete = async (id) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa sinh viên này?')) {
       try {
-        await fetch(`/api/students/${id}`, { method: 'DELETE' });
-        fetchStudents(); // Cập nhật lại danh sách sau khi xóa (Câu 63)
+        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        fetchStudents();
       } catch (err) {
         console.error('Lỗi xóa sinh viên:', err);
       }
@@ -84,7 +86,7 @@ function App() {
 
   return (
     <div style={{ maxWidth: '800px', margin: '40px auto', fontFamily: 'sans-serif', textAlign: 'center' }}>
-      <h1>Quản lý sinh viên</h1>
+      <h1>Quản lý sinh viên - Phiên bản 2.0</h1>
 
       {/* Form Nhập / Sửa sinh viên */}
       <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '30px' }}>
